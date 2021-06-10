@@ -16,7 +16,7 @@ namespace NerdStore.Core.Data
         void Remover(T entity);
         void Atualizar(T entity);
 
-        Task<T> BuscarPorIdAsync(int id);
+        Task<T> BuscarPorIdAsync(Guid id);
         Task<T> PrimeiroAsync(Expression<Func<T, bool>> expression);
         Task<int> QuantidadeAsync(Expression<Func<T, bool>> expression);
 

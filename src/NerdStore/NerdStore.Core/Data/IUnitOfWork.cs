@@ -1,9 +1,10 @@
 using System;
+using System.Threading.Tasks;
 
 namespace NerdStore.Core.Data
 {
     public interface IUnitOfWork : IDisposable
     {
-        bool Commit();
+        Task<bool> Commit();
     }
 }

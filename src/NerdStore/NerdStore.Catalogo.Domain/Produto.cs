@@ -43,11 +43,11 @@ namespace NerdStore.Catalogo.Domain
             
         }
 
-        // Para o EF
-        // public Produto()
-        // {
-        //     
-        // }
+        //Para o EF
+        protected Produto()
+        {
+            
+        }
         
         public void Ativar() => Ativo = true;
 
