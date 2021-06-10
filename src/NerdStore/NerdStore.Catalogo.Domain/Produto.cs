@@ -28,7 +28,8 @@ namespace NerdStore.Catalogo.Domain
             decimal valor, 
             DateTime dataCadastro, 
             string imagem,
-            Guid categoriaId
+            Guid categoriaId,
+            Dimensoes dimensoes
             )
         {
             Nome = nome;
@@ -38,6 +39,7 @@ namespace NerdStore.Catalogo.Domain
             DataCadastro = dataCadastro;
             Imagem = imagem;
             CategoriaId = categoriaId;
+            Dimensoes = dimensoes;
             
             Validar();
             

@@ -20,7 +20,7 @@ namespace NerdStore.Catalogo.Testes
                 0, 
                 DateTime.Now, 
                 "", 
-                Guid.Empty);
+                Guid.Empty, new Dimensoes(0, 0, 0));
 
             var eValido = produto.EValido();
 
