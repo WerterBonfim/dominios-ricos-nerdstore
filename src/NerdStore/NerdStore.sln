@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{18527B13-E51F-4BED-AB32-0114CA79DDDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApps", "WebApps", "{E5C5FCE8-69C2-48BE-A041-6B3259E417F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cadastro", "Cadastro", "{D3A4350B-AA8F-47F8-BE4A-1A1D6427A15B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalogo", "Catalogo", "{FD6F8A2C-2BF1-4774-9329-0BEC2647158C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0649588E-53B8-415D-B281-BD8A2CD776DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdStore.Catalogo.Domain", "NerdStore.Catalogo.Domain\NerdStore.Catalogo.Domain.csproj", "{7DD6E6D1-7F44-4EF1-93E4-C8AD322ECC20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdStore.Core", "NerdStore.Core\NerdStore.Core.csproj", "{92C13F60-4902-4E47-9A90-727270C7B90B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D3A4350B-AA8F-47F8-BE4A-1A1D6427A15B} = {18527B13-E51F-4BED-AB32-0114CA79DDDD}
+		{FD6F8A2C-2BF1-4774-9329-0BEC2647158C} = {18527B13-E51F-4BED-AB32-0114CA79DDDD}
+		{0649588E-53B8-415D-B281-BD8A2CD776DD} = {18527B13-E51F-4BED-AB32-0114CA79DDDD}
+		{7DD6E6D1-7F44-4EF1-93E4-C8AD322ECC20} = {FD6F8A2C-2BF1-4774-9329-0BEC2647158C}
+		{92C13F60-4902-4E47-9A90-727270C7B90B} = {0649588E-53B8-415D-B281-BD8A2CD776DD}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DD6E6D1-7F44-4EF1-93E4-C8AD322ECC20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD6E6D1-7F44-4EF1-93E4-C8AD322ECC20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD6E6D1-7F44-4EF1-93E4-C8AD322ECC20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD6E6D1-7F44-4EF1-93E4-C8AD322ECC20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92C13F60-4902-4E47-9A90-727270C7B90B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92C13F60-4902-4E47-9A90-727270C7B90B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92C13F60-4902-4E47-9A90-727270C7B90B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92C13F60-4902-4E47-9A90-727270C7B90B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
