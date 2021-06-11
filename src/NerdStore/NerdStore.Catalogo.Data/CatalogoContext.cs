@@ -54,7 +54,7 @@ namespace NerdStore.Catalogo.Data
             var builder = new DbContextOptionsBuilder<CatalogoContext>();
             builder
                 .UseSqlServer("Server=localhost, 1433;" +
-                              "Database=DominiosRicos;" +
+                              "Database=DominiosRicosDb;" +
                               "User Id=sa;" +
                               "Password=!123Senha;" +
                               "Application Name=\"DominiosRicos\";pooling=true;")

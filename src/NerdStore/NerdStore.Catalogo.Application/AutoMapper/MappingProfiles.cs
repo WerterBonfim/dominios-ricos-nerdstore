@@ -10,8 +10,8 @@ namespace NerdStore.Catalogo.Application.AutoMapper
         {
             CreateMap<Produto, ProdutoViewModel>()
                 .ForMember(d => d.Altura, o => o.MapFrom(s => s.Dimensoes.Altura))
-                .ForMember(d => d.Altura, o => o.MapFrom(s => s.Dimensoes.Altura))
-                .ForMember(d => d.Altura, o => o.MapFrom(s => s.Dimensoes.Altura));
+                .ForMember(d => d.Profundidade, o => o.MapFrom(s => s.Dimensoes.Profundidade))
+                .ForMember(d => d.Largura, o => o.MapFrom(s => s.Dimensoes.Largura));
 
             CreateMap<Categoria, CategoriaViewModel>();
         }

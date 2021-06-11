@@ -10,7 +10,7 @@ using NerdStore.Catalogo.Data;
 namespace NerdStore.Catalogo.Data.Migrations
 {
     [DbContext(typeof(CatalogoContext))]
-    [Migration("20210610142940_InicialCatalogo")]
+    [Migration("20210611100230_InicialCatalogo")]
     partial class InicialCatalogo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
