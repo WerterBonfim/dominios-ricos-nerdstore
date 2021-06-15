@@ -11,6 +11,9 @@ using NerdStore.Catalogo.Domain;
 using NerdStore.Catalogo.Domain.Events;
 using NerdStore.Core.Bus;
 using NerdStore.Vendas.Application.Commands;
+using NerdStore.Vendas.Data;
+using NerdStore.Vendas.Data.Repository;
+using NerdStore.Vendas.Domain;
 
 namespace NerdStore.WebApi.Configuracoes
 {
@@ -34,11 +37,21 @@ namespace NerdStore.WebApi.Configuracoes
             
             // Vendas
             servicos.AddScoped<IRequestHandler<AdicionarItemPedidoCommand, bool>, PedidoCommandHandler>();
+            
+            // Pedido
+            servicos.AddScoped<IPedidoRepository, PedidoRepository>();
 
 
             servicos.AddDbContext<CatalogoContext>(options =>
                 options
-                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+                    .UseSqlServer(configuration.GetConnectionString("Catalogo"))
+                    .EnableSensitiveDataLogging()
+                    .LogTo(Console.WriteLine, LogLevel.Information)
+            );
+            
+            servicos.AddDbContext<VendasContext>(options =>
+                options
+                    .UseSqlServer(configuration.GetConnectionString("Vendas"))
                     .EnableSensitiveDataLogging()
                     .LogTo(Console.WriteLine, LogLevel.Information)
             );

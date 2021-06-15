@@ -25,6 +25,7 @@ namespace NerdStore.Core.WebApi.Controllers
                 {"Mensagens", _erros.ToArray()}
             };
 
+            LimparErros();
             return BadRequest(new ValidationProblemDetails(erros));
         }
 
@@ -44,7 +45,7 @@ namespace NerdStore.Core.WebApi.Controllers
             });
         }
 
-        private void AdicionarErro(string mensagem) => _erros.Add(mensagem);
+        protected void AdicionarErro(string mensagem) => _erros.Add(mensagem);
         private bool OperacaoValida() => !_erros.Any();
 
         private void LimparErros() => _erros.Clear();

@@ -3,36 +3,40 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Logging;
-using NerdStore.Catalogo.Domain;
 using NerdStore.Core.Data;
 using NerdStore.Core.Messages;
+using NerdStore.Vendas.Domain;
 
-namespace NerdStore.Catalogo.Data
+namespace NerdStore.Vendas.Data
 {
-    public class CatalogoContext : DbContextBase
+    public class VendasContext : DbContextBase
     {
-        public DbSet<Produto> Produtos { get; set; }
-        public DbSet<Categoria> Categorias { get; set; }
-
-        public CatalogoContext(DbContextOptions<CatalogoContext> options) : base(options)
+        public VendasContext(DbContextOptions<VendasContext> options) : base(options)
         {
-            
         }
+
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<PedidoItem> PedidoItens { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogoContext).Assembly);
             modelBuilder.Ignore<Event>();
+            
+            modelBuilder.HasSequence<int>("MinhaSequencia")
+                .StartsAt(1000)
+                .IncrementsBy(1);
+            
             base.OnModelCreating(modelBuilder);
         }
-
     }
-
-    public class ApplicationContextFactory : IDesignTimeDbContextFactory<CatalogoContext>
+    
+    public class ApplicationContextFactory : IDesignTimeDbContextFactory<VendasContext>
     {
-        public CatalogoContext CreateDbContext(string[] args)
+        public VendasContext CreateDbContext(string[] args)
         {
-            var builder = new DbContextOptionsBuilder<CatalogoContext>();
+            var builder = new DbContextOptionsBuilder<VendasContext>();
             builder
                 .UseSqlServer("Server=localhost, 1433;" +
                               "Database=DominiosRicosDb;" +
@@ -42,7 +46,7 @@ namespace NerdStore.Catalogo.Data
                 .LogTo(Console.WriteLine)
                 .EnableSensitiveDataLogging();
 
-            return new CatalogoContext(builder.Options);
+            return new VendasContext(builder.Options);
         }
     }
 }

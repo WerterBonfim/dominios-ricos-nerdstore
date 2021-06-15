@@ -12,7 +12,6 @@ namespace NerdStore.Catalogo.Domain
     {
         private readonly IProdutoRepository _produtoRepository;
         private readonly IMediatrHandler _bus;
-        
 
         public EstoqueService(
             IProdutoRepository produtoRepository,
@@ -54,7 +53,7 @@ namespace NerdStore.Catalogo.Domain
 
         public void Dispose()
         {
-            _produtoRepository.Dispose();
+            _produtoRepository?.Dispose();
         }
     }
 }

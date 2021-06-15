@@ -6,12 +6,12 @@ using NerdStore.Catalogo.Application.ViewModels;
 namespace NerdStore.Catalogo.Application.Services
 {
     // Atendem a necessidade do frontend
-    public interface IProdutoAppService: IDisposable
+    public interface IProdutoAppService : IDisposable
     {
-        Task<IEnumerable<ProdutoViewModel>> ObterPorCategoria(int codigo);
-        Task<ProdutoViewModel> ObterPorId(Guid id);
-        Task<IEnumerable<ProdutoViewModel>> ObterTodos();
-        Task<IEnumerable<CategoriaViewModel>> ObterCategorias();
+        Task<IEnumerable<ProdutoViewModel>> ListarPorCategoria(int codigo);
+        Task<ProdutoViewModel> BuscarPorId(Guid id);
+        Task<IEnumerable<ProdutoViewModel>> Listar();
+        Task<IEnumerable<CategoriaViewModel>> ListarCategorias();
 
         Task AdicionarProduto(ProdutoViewModel produtoViewModel);
         Task AtualizarProduto(ProdutoViewModel produtoViewModel);

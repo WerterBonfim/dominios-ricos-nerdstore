@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NerdStore.Catalogo.Application.AutoMapper;
@@ -9,7 +10,7 @@ namespace NerdStore.WebApi.Configuracoes
 {
     public static class ApiConfig
     {
-        public static IServiceCollection AdicionarConfiguracaoDaApi(this IServiceCollection services)
+        public static IServiceCollection AdicionarConfiguracaoDaApi(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
             
@@ -19,6 +20,9 @@ namespace NerdStore.WebApi.Configuracoes
                 );
 
             services.AddMediatR(typeof(Startup));
+
+            services.AdicionarConfiguracaoDeIdentidade(configuration);
+           
             
             return services;
         }
@@ -29,8 +33,8 @@ namespace NerdStore.WebApi.Configuracoes
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            
-            //app.UseAuthorization();
+
+            app.UsarConfiguracaoDeIdentidade(env);
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
             return app;

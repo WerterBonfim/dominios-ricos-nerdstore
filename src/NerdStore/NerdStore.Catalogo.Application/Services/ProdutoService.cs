@@ -24,28 +24,28 @@ namespace NerdStore.Catalogo.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProdutoViewModel>> ObterPorCategoria(int codigo)
+        public async Task<IEnumerable<ProdutoViewModel>> ListarPorCategoria(int codigo)
         {
             var produtosDaCategoria = await _produtoRepository.ObterPorCategoria(codigo);
             var viewModel = _mapper.Map<IEnumerable<ProdutoViewModel>>(produtosDaCategoria);
             return viewModel;
         }
 
-        public async Task<ProdutoViewModel> ObterPorId(Guid id)
+        public async Task<ProdutoViewModel> BuscarPorId(Guid id)
         {
             var produto = await _produtoRepository.BuscarPorIdAsync(id);
             var viewModel = _mapper.Map<ProdutoViewModel>(produto);
             return viewModel;
         }
 
-        public async Task<IEnumerable<ProdutoViewModel>> ObterTodos()
+        public async Task<IEnumerable<ProdutoViewModel>> Listar()
         {
             var produtos = await _produtoRepository.ListarAsync();
             var viewModel = _mapper.Map<IEnumerable<ProdutoViewModel>>(produtos);
             return viewModel;
         }
 
-        public async Task<IEnumerable<CategoriaViewModel>> ObterCategorias()
+        public async Task<IEnumerable<CategoriaViewModel>> ListarCategorias()
         {
             var categorias = await _produtoRepository.ListarCategorias();
             var viewModel = _mapper.Map<IEnumerable<CategoriaViewModel>>(categorias);
@@ -75,7 +75,7 @@ namespace NerdStore.Catalogo.Application.Services
             if (!debitou)
                 throw new DomainException("Falha ao debitar estoque");
 
-            return await ObterPorId(id);
+            return await BuscarPorId(id);
         }
 
         public async Task<ProdutoViewModel> ReporEstoque(Guid id, int quantidade)
@@ -84,7 +84,7 @@ namespace NerdStore.Catalogo.Application.Services
             if (!atualizou)
                 throw new DomainException("Falha ao tentar atualizar o estoque");
 
-            return await ObterPorId(id);
+            return await BuscarPorId(id);
         }
         
         public void Dispose()

@@ -30,5 +30,6 @@ namespace NerdStore.WebApi.Controllers
             var produto = await _produtoAppService.DebitarEstoque(produtoId, quantidade);
             return RespostaPersonalizada(produto);
         }
+        
     }
 }
