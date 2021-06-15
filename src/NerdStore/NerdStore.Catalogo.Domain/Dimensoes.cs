@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
+using FluentValidation.Results;
 using NerdStore.Core.DomainObjects;
 using NerdStore.Core.Messages;
 
 namespace NerdStore.Catalogo.Domain
 {
-    public class Dimensoes : LidarComValidacoes
+    public class Dimensoes : ILidarComValidacoes
     {
         public decimal Altura { get; private set; }
         public decimal Largura { get; private set; }
@@ -20,9 +21,23 @@ namespace NerdStore.Catalogo.Domain
             Validar();
         }
 
-        public override void Validar()
+        public ValidationResult ResultadoDaValidacao { get; set; }
+
+        public void Validar()
         {
             ResultadoDaValidacao = new Validacao().Validate(this);
+        }
+
+        public bool EValido()
+        {
+            return ResultadoDaValidacao.IsValid;
+        }
+
+        public IEnumerable<string> ListarErros()
+        {
+            return ResultadoDaValidacao
+                .Errors
+                .Select(x => x.ErrorMessage);
         }
 
         public string DescricaoFormatada()
@@ -46,11 +61,11 @@ namespace NerdStore.Catalogo.Domain
                 RuleFor(x => x.Altura)
                     .GreaterThan(0)
                     .WithMessage(MsgErroAltura);
-                
+
                 RuleFor(x => x.Largura)
                     .GreaterThan(0)
                     .WithMessage(MsgErroLargura);
-                
+
                 RuleFor(x => x.Profundidade)
                     .GreaterThan(0)
                     .WithMessage(MsgErroProfundidade);

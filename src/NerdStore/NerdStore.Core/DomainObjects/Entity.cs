@@ -6,7 +6,7 @@ using NerdStore.Core.Messages;
 
 namespace NerdStore.Core.DomainObjects
 {
-    public abstract class Entity : LidarComValidacoes
+    public abstract class Entity : ILidarComValidacoes
     {
         public Guid Id { get; private set; }
 
@@ -17,8 +17,8 @@ namespace NerdStore.Core.DomainObjects
         }
 
         #region [ Comparações ]
-        
-        #nullable enable
+
+#nullable enable
         public override bool Equals(object? obj)
         {
             var compareTo = obj as Entity;
@@ -55,6 +55,25 @@ namespace NerdStore.Core.DomainObjects
         public override string ToString()
         {
             return $"{GetType().Name} [Id={Id}]";
+        }
+
+        public ValidationResult ResultadoDaValidacao { get; set; }
+
+        public virtual void Validar()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool EValido()
+        {
+            return ResultadoDaValidacao.IsValid;
+        }
+
+        public IEnumerable<string> ListarErros()
+        {
+            return ResultadoDaValidacao
+                .Errors
+                .Select(x => x.ErrorMessage);
         }
     }
 }

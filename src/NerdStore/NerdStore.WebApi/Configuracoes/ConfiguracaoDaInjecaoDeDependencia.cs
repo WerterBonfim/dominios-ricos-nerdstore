@@ -10,6 +10,7 @@ using NerdStore.Catalogo.Data.Repository;
 using NerdStore.Catalogo.Domain;
 using NerdStore.Catalogo.Domain.Events;
 using NerdStore.Core.Bus;
+using NerdStore.Vendas.Application.Commands;
 
 namespace NerdStore.WebApi.Configuracoes
 {
@@ -27,9 +28,13 @@ namespace NerdStore.WebApi.Configuracoes
             servicos.AddScoped<IProdutoRepository, ProdutoRepository>();
             servicos.AddScoped<IProdutoAppService, ProdutoService>();
             servicos.AddScoped<IEstoqueService, EstoqueService>();
-            
+
             // Eventos de dominio
             servicos.AddScoped<INotificationHandler<ProdutoComEstoqueInferiorEvent>, ProdutoEventHandler>();
+            
+            // Vendas
+            servicos.AddScoped<IRequestHandler<AdicionarItemPedidoCommand, bool>, PedidoCommandHandler>();
+
 
             servicos.AddDbContext<CatalogoContext>(options =>
                 options
