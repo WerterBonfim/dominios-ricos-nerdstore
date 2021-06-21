@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NerdStore.Vendas.Data;
 
 namespace NerdStore.Vendas.Data.Migrations
 {
     [DbContext(typeof(VendasContext))]
-    partial class VendasContextModelSnapshot : ModelSnapshot
+    [Migration("20210617103449_InicialVendas")]
+    partial class InicialVendas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +44,7 @@ namespace NerdStore.Vendas.Data.Migrations
                     b.Property<decimal>("ValorDeDesconto")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid?>("VoucherId")
+                    b.Property<Guid>("VoucherId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("VoucherUtilizado")
@@ -62,9 +64,6 @@ namespace NerdStore.Vendas.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PedidoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProdutoId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantidade")
@@ -103,7 +102,9 @@ namespace NerdStore.Vendas.Data.Migrations
                 {
                     b.HasOne("NerdStore.Vendas.Domain.Voucher", "Voucher")
                         .WithMany("Pedidos")
-                        .HasForeignKey("VoucherId");
+                        .HasForeignKey("VoucherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Voucher");
                 });

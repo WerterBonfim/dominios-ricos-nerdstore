@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Data;
 using NerdStore.Core.Messages;
 using NerdStore.Vendas.Domain;
@@ -11,8 +12,18 @@ namespace NerdStore.Vendas.Data
 {
     public class VendasContext : DbContextBase
     {
+        
+
         public VendasContext(DbContextOptions<VendasContext> options) : base(options)
         {
+        }
+
+        public VendasContext(
+            DbContextOptions<VendasContext> options,
+            IMediatrHandler mediatrHandler
+        ) : base(options, mediatrHandler)
+        {
+            
         }
 
         public DbSet<Pedido> Pedidos { get; set; }
@@ -22,16 +33,16 @@ namespace NerdStore.Vendas.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Ignore<Event>();
-            
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(VendasContext).Assembly);
+
             modelBuilder.HasSequence<int>("MinhaSequencia")
                 .StartsAt(1000)
                 .IncrementsBy(1);
-            
+
             base.OnModelCreating(modelBuilder);
         }
     }
-    
+
     public class ApplicationContextFactory : IDesignTimeDbContextFactory<VendasContext>
     {
         public VendasContext CreateDbContext(string[] args)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using NerdStore.Catalogo.Application.ViewModels;
 
+
 namespace NerdStore.Catalogo.Application.Services
 {
     // Atendem a necessidade do frontend
@@ -15,8 +16,10 @@ namespace NerdStore.Catalogo.Application.Services
 
         Task AdicionarProduto(ProdutoViewModel produtoViewModel);
         Task AtualizarProduto(ProdutoViewModel produtoViewModel);
+        Task<CategoriaViewModel> AdicionarCategoria(CategoriaViewModel categoriaViewModel);
 
         Task<ProdutoViewModel> DebitarEstoque(Guid id, int quantidade);
         Task<ProdutoViewModel> ReporEstoque(Guid id, int quantidade);
+        
     }
 }

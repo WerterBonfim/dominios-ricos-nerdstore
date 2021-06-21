@@ -69,6 +69,15 @@ namespace NerdStore.Catalogo.Application.Services
 
         }
 
+        public async Task<CategoriaViewModel> AdicionarCategoria(CategoriaViewModel categoriaViewModel)
+        {
+            var categoria = _mapper.Map<Categoria>(categoriaViewModel);
+            _produtoRepository.Adicionar(categoria);
+            await _produtoRepository.UnitOfWork.Commit();
+            categoriaViewModel = _mapper.Map<CategoriaViewModel>(categoria);
+            return categoriaViewModel;
+        }
+
         public async Task<ProdutoViewModel> DebitarEstoque(Guid id, int quantidade)
         {
             var debitou = await _estoqueService.DebitarEstoque(id, quantidade);

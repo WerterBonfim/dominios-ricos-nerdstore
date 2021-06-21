@@ -16,6 +16,7 @@ namespace NerdStore.Vendas.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Codigo = table.Column<string>(type: "varchar(100)", nullable: false),
                     TipoDesconto = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -28,8 +29,9 @@ namespace NerdStore.Vendas.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Codigo = table.Column<int>(type: "int", nullable: false),
-                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Codigo = table.Column<int>(type: "int", nullable: false, defaultValueSql: "NEXT VALUE FOR MinhaSequencia"),
+                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ClienteId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     VoucherUtilizado = table.Column<bool>(type: "bit", nullable: false),
                     ValorDeDesconto = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -42,7 +44,7 @@ namespace NerdStore.Vendas.Data.Migrations
                         column: x => x.VoucherId,
                         principalTable: "Vouchers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,7 +53,8 @@ namespace NerdStore.Vendas.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PedidoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false)
+                    Quantidade = table.Column<int>(type: "int", nullable: false),
+                    Titulo = table.Column<string>(type: "varchar(250)", nullable: false)
                 },
                 constraints: table =>
                 {

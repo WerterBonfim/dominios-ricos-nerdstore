@@ -1,14 +1,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 
 namespace NerdStore.Core.WebApi.Controllers
 {
     [ApiController]
     public class BaseController : Controller
     {
-        private readonly ICollection<string> _erros = new List<string>();
+        private readonly DomainNotificationHandler _notifications;
+        private readonly IMediatrHandler _mediatrHandler;
+        private IList<DomainNotificaton> Erros => _notifications.ObterNotificacoes();
+
+        public BaseController(
+            INotificationHandler<DomainNotificaton> domainNotificationHandler,
+            IMediatrHandler mediatrHandler
+            )
+        {
+            _notifications = (DomainNotificationHandler)domainNotificationHandler;
+            _mediatrHandler = mediatrHandler;
+        }
 
         /// <summary>
         /// 
@@ -22,7 +36,7 @@ namespace NerdStore.Core.WebApi.Controllers
 
             var erros = new Dictionary<string, string[]>
             {
-                {"Mensagens", _erros.ToArray()}
+                {"Mensagens", Erros.Select(x => x.Value).ToArray()}
             };
 
             LimparErros();
@@ -45,9 +59,9 @@ namespace NerdStore.Core.WebApi.Controllers
             });
         }
 
-        protected void AdicionarErro(string mensagem) => _erros.Add(mensagem);
-        private bool OperacaoValida() => !_erros.Any();
+        protected void AdicionarErro(string mensagem) => Erros.Add(new DomainNotificaton("Domain", mensagem));
+        private bool OperacaoValida() => !Erros.Any();
 
-        private void LimparErros() => _erros.Clear();
+        private void LimparErros() => Erros.Clear();
     }
 }

@@ -16,6 +16,7 @@ namespace NerdStore.Vendas.Domain
 
         public int Codigo { get; private set; }
         public decimal ValorTotal => ObterValorTotal();
+        public Guid? VoucherId { get; set; }
         public Voucher Voucher { get; private set; }
         public Guid ClienteId { get; }
         public PedidoStatus Status { get; private set; }
@@ -38,7 +39,7 @@ namespace NerdStore.Vendas.Domain
         public void AdicionarItem(PedidoItem item)
         {
             item.AssociarPedido(Id);
-            
+
             var produtoJaFoiAdicionado = _itens.Contains(item);
 
             if (produtoJaFoiAdicionado)

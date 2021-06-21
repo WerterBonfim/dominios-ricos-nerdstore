@@ -9,8 +9,11 @@ using NerdStore.Catalogo.Data;
 using NerdStore.Catalogo.Data.Repository;
 using NerdStore.Catalogo.Domain;
 using NerdStore.Catalogo.Domain.Events;
-using NerdStore.Core.Bus;
+using NerdStore.Core.Communication;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Vendas.Application.Commands;
+using NerdStore.Vendas.Application.Events;
 using NerdStore.Vendas.Data;
 using NerdStore.Vendas.Data.Repository;
 using NerdStore.Vendas.Domain;
@@ -24,9 +27,7 @@ namespace NerdStore.WebApi.Configuracoes
             IConfiguration configuration
             )
         {
-            // Domain Bus (Mediator)
-            servicos.AddScoped<IMediatrHandler, MediatrHandler>();
-
+            
             // Catalogo
             servicos.AddScoped<IProdutoRepository, ProdutoRepository>();
             servicos.AddScoped<IProdutoAppService, ProdutoService>();
@@ -41,7 +42,7 @@ namespace NerdStore.WebApi.Configuracoes
             // Pedido
             servicos.AddScoped<IPedidoRepository, PedidoRepository>();
 
-
+            // DbContexts
             servicos.AddDbContext<CatalogoContext>(options =>
                 options
                     .UseSqlServer(configuration.GetConnectionString("Catalogo"))
@@ -57,7 +58,17 @@ namespace NerdStore.WebApi.Configuracoes
             );
             
             
+            // Mediator
+            servicos.AddScoped<IMediatrHandler, MediatrHandler>();
             
+            // Notifications
+            servicos.AddScoped<INotificationHandler<DomainNotificaton>, DomainNotificationHandler>();
+            servicos.AddScoped<INotificationHandler<PedidoRascunhoIniciadoEvent>, PedidoEventHandler>();
+            servicos.AddScoped<INotificationHandler<ItemDoPedidoAdicionadoEvent>, PedidoEventHandler>();
+            servicos.AddScoped<INotificationHandler<PedidoAtualizadoEvent>, PedidoEventHandler>();
+
+
+
         }
     }
 }

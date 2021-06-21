@@ -22,7 +22,7 @@ namespace NerdStore.Catalogo.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogoContext).Assembly);
-            modelBuilder.Ignore<Event>();
+            
             base.OnModelCreating(modelBuilder);
         }
 

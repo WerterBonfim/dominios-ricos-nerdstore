@@ -31,21 +31,22 @@ namespace NerdStore.Vendas.Data.Repository
 
         public async Task<Pedido> BuscarPedidoRascunhoPorClienteId(Guid clienteId)
         {
-            Expression<Func<Pedido, bool>> query = x =>
-                x.Status == PedidoStatus.Rascunho &&
-                x.ClienteId == clienteId;
 
             var pedido = await _context.Pedidos
-                .AsNoTrackingWithIdentityResolution()
-                .FirstOrDefaultAsync(query);
+                .Include(x => x.Itens)
+                //.Include(x => x.Voucher)
+                //.AsNoTrackingWithIdentityResolution()
+                .FirstOrDefaultAsync(x =>
+                    x.Status == PedidoStatus.Rascunho &&
+                    x.ClienteId == clienteId);
 
             if (pedido == null) return null;
-            
-            
-            
-            return await base.PrimeiroAsync(x =>
-                x.Status == PedidoStatus.Rascunho &&
-                x.ClienteId == clienteId);
+
+            await _context.Entry(pedido)
+                .Reference(x => x.Voucher)
+                .LoadAsync();
+
+            return pedido;
         }
 
         

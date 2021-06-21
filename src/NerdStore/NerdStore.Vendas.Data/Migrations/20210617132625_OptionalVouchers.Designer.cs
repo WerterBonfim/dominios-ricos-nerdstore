@@ -10,8 +10,8 @@ using NerdStore.Vendas.Data;
 namespace NerdStore.Vendas.Data.Migrations
 {
     [DbContext(typeof(VendasContext))]
-    [Migration("20210615192019_InicialVendas")]
-    partial class InicialVendas
+    [Migration("20210617132625_OptionalVouchers")]
+    partial class OptionalVouchers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,8 +30,13 @@ namespace NerdStore.Vendas.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Codigo")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR MinhaSequencia");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -64,6 +69,10 @@ namespace NerdStore.Vendas.Data.Migrations
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PedidoId");
@@ -77,6 +86,10 @@ namespace NerdStore.Vendas.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
                     b.Property<int>("TipoDesconto")
                         .HasColumnType("int");
 
@@ -88,7 +101,7 @@ namespace NerdStore.Vendas.Data.Migrations
             modelBuilder.Entity("NerdStore.Vendas.Domain.Pedido", b =>
                 {
                     b.HasOne("NerdStore.Vendas.Domain.Voucher", "Voucher")
-                        .WithMany()
+                        .WithMany("Pedidos")
                         .HasForeignKey("VoucherId");
 
                     b.Navigation("Voucher");
@@ -108,6 +121,11 @@ namespace NerdStore.Vendas.Data.Migrations
             modelBuilder.Entity("NerdStore.Vendas.Domain.Pedido", b =>
                 {
                     b.Navigation("Itens");
+                });
+
+            modelBuilder.Entity("NerdStore.Vendas.Domain.Voucher", b =>
+                {
+                    b.Navigation("Pedidos");
                 });
 #pragma warning restore 612, 618
         }

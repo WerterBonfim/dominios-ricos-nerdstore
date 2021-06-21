@@ -3,17 +3,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Extensions;
+using NerdStore.Core.Messages;
 
 namespace NerdStore.Core.Data
 {
     public abstract class DbContextBase : DbContext, IUnitOfWork
     {
+        private readonly IMediatrHandler _mediatrHandler;
 
         public DbContextBase(DbContextOptions options) : base(options)
         {
-            
         }
-        
+
+        public DbContextBase(
+            DbContextOptions options,
+            IMediatrHandler mediatrHandler
+        ) : base(options)
+        {
+            _mediatrHandler = mediatrHandler;
+        }
+
         public async Task<bool> Commit()
         {
             var camposDataCadastro = ChangeTracker
@@ -28,15 +39,16 @@ namespace NerdStore.Core.Data
                     entry.Property("DataCadastro").IsModified = false;
             }
 
+            await _mediatrHandler.PublicarEventos(this);
             return await base.SaveChangesAsync() > 0;
         }
-        
-        
-        
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Ignore<ValidationResult>();
-            
+            modelBuilder.Ignore<Event>();
+
             ForcarVarchar(modelBuilder);
 
             // var relacoes = modelBuilder.Model
@@ -48,7 +60,7 @@ namespace NerdStore.Core.Data
 
             base.OnModelCreating(modelBuilder);
         }
-        
+
         private static void ForcarVarchar(ModelBuilder modelBuilder)
         {
             var camposNVarchar = modelBuilder.Model.GetEntityTypes()

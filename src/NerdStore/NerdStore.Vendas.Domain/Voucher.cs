@@ -17,6 +17,9 @@ namespace NerdStore.Vendas.Domain
         public bool Utilizado { get; }
         public TipoDescontoVoucher TipoDesconto { get; private set; }
 
+        // EF
+        public ICollection<Pedido> Pedidos { get; set; } 
+
         public Voucher()
         {
             

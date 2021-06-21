@@ -4,11 +4,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Core.WebApi.Controllers;
 using NerdStore.WebApi.Extencoes;
 
@@ -19,13 +22,15 @@ namespace NerdStore.WebApi.Controllers
     {
         private readonly AppSettings _appSettings;
 
-        public AuthController(IOptions<AppSettings> appSettings)
+        public AuthController(IOptions<AppSettings> appSettings,
+            INotificationHandler<DomainNotificaton> domainNotificationHandler,
+            IMediatrHandler mediatrHandler) : base(domainNotificationHandler, mediatrHandler)
         {
             _appSettings = appSettings.Value;
         }
 
         [HttpPost("nova-conta")]
-        public async Task<IActionResult> Registrar(string email, string senha)
+        public IActionResult Registrar(string email, string senha)
         {
             return RespostaPersonalizada(GerarToken(email));
         }
@@ -33,10 +38,10 @@ namespace NerdStore.WebApi.Controllers
 
         [Authorize]
         [HttpPost("login")]
-        public async Task<IActionResult> EfetuarLogin(string email)
+        public IActionResult EfetuarLogin(string email)
         {
             var tesate = User;
-            
+
             return RespostaPersonalizada(
                 User.Identity.Name
             );
@@ -59,7 +64,7 @@ namespace NerdStore.WebApi.Controllers
                 ),
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new (ClaimTypes.Name, email),
+                    new(ClaimTypes.Name, email),
                     new(ClaimTypes.Email, email),
                     new(ClaimTypes.Sid, email)
                 })

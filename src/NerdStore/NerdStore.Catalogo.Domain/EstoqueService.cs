@@ -1,7 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using NerdStore.Catalogo.Domain.Events;
-using NerdStore.Core.Bus;
+using NerdStore.Core.Communication;
+using NerdStore.Core.Communication.Mediator;
 
 namespace NerdStore.Catalogo.Domain
 {
@@ -32,7 +33,7 @@ namespace NerdStore.Catalogo.Domain
             
             // TODO: Parametrizar a quantidade de estoque baixo
             if (produto.QuantidadeEstoque < 10)
-                _bus.PublicarEvento(new ProdutoComEstoqueInferiorEvent(produto.Id, produto.QuantidadeEstoque));
+                await _bus.PublicarEvento(new ProdutoComEstoqueInferiorEvent(produto.Id, produto.QuantidadeEstoque));
 
             _produtoRepository.Atualizar(produto);
 
