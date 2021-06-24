@@ -9,6 +9,9 @@ namespace NerdStore.Core.DomainObjects
     public abstract class Entity : ILidarComValidacoes
     {
         public Guid Id { get; private set; }
+        public DateTime DataCadastro { get; private set; }
+        
+        
         private List<Event> _notificacoes;
         public IReadOnlyCollection<Event> Notificacoes => _notificacoes?.AsReadOnly();
 
@@ -16,6 +19,7 @@ namespace NerdStore.Core.DomainObjects
         protected Entity()
         {
             Id = Guid.NewGuid();
+            DataCadastro = DateTime.Now;
         }
 
         public void AdicionarEvento(Event evento)

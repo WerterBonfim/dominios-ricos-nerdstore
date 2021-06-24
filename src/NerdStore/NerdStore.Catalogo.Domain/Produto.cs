@@ -12,7 +12,6 @@ namespace NerdStore.Catalogo.Domain
         public string Descricao { get; private set; }
         public bool Ativo { get; private set; }
         public decimal Valor { get; private set; }
-        public DateTime DataCadastro { get; private set; }
         public string Imagem { get; private set; }
         public int QuantidadeEstoque { get; private set; }
         public Dimensoes Dimensoes { get; private set; }
@@ -36,7 +35,6 @@ namespace NerdStore.Catalogo.Domain
             Descricao = descricao;
             Ativo = ativo;
             Valor = valor;
-            DataCadastro = dataCadastro;
             Imagem = imagem;
             CategoriaId = categoriaId;
             Dimensoes = dimensoes;

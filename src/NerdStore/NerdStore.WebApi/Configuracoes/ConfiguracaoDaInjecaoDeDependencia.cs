@@ -14,6 +14,7 @@ using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Vendas.Application.Commands;
 using NerdStore.Vendas.Application.Events;
+using NerdStore.Vendas.Application.Queries;
 using NerdStore.Vendas.Data;
 using NerdStore.Vendas.Data.Repository;
 using NerdStore.Vendas.Domain;
@@ -32,32 +33,36 @@ namespace NerdStore.WebApi.Configuracoes
             servicos.AddScoped<IProdutoRepository, ProdutoRepository>();
             servicos.AddScoped<IProdutoAppService, ProdutoService>();
             servicos.AddScoped<IEstoqueService, EstoqueService>();
-
-            // Eventos de dominio
-            servicos.AddScoped<INotificationHandler<ProdutoComEstoqueInferiorEvent>, ProdutoEventHandler>();
-            
-            // Vendas
-            servicos.AddScoped<IRequestHandler<AdicionarItemPedidoCommand, bool>, PedidoCommandHandler>();
-            
-            // Pedido
-            servicos.AddScoped<IPedidoRepository, PedidoRepository>();
-
-            // DbContexts
             servicos.AddDbContext<CatalogoContext>(options =>
                 options
                     .UseSqlServer(configuration.GetConnectionString("Catalogo"))
                     .EnableSensitiveDataLogging()
                     .LogTo(Console.WriteLine, LogLevel.Information)
             );
+
             
+            
+            // Eventos de dominio
+            servicos.AddScoped<INotificationHandler<ProdutoComEstoqueInferiorEvent>, ProdutoEventHandler>();
+            
+            
+            
+            // Vendas
+            servicos.AddScoped<IRequestHandler<AdicionarItemPedidoCommand, bool>, PedidoCommandHandler>();
+            servicos.AddScoped<IRequestHandler<AtualizarItemPedidoCommand, bool>, PedidoCommandHandler>();
+            servicos.AddScoped<IRequestHandler<RemoverItemPedidoCommand, bool>, PedidoCommandHandler>();
+            servicos.AddScoped<IRequestHandler<AplicarVoucherPedidoCommand, bool>, PedidoCommandHandler>();
+            
+            servicos.AddScoped<IPedidoRepository, PedidoRepository>();
+            servicos.AddScoped<IPedidoQueries, PedidoQueries>();
             servicos.AddDbContext<VendasContext>(options =>
                 options
                     .UseSqlServer(configuration.GetConnectionString("Vendas"))
                     .EnableSensitiveDataLogging()
                     .LogTo(Console.WriteLine, LogLevel.Information)
             );
-            
-            
+
+
             // Mediator
             servicos.AddScoped<IMediatrHandler, MediatrHandler>();
             

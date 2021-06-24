@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentValidation.Results;
@@ -11,6 +12,7 @@ namespace NerdStore.Core.WebApi.Controllers
     [ApiController]
     public class BaseController : Controller
     {
+        public Guid ClienteId = new Guid("E1D6E0BA-2C6C-4CFA-B0A9-7D107933B67B");
         private readonly DomainNotificationHandler _notifications;
         private readonly IMediatrHandler _mediatrHandler;
         private IList<DomainNotificaton> Erros => _notifications.ObterNotificacoes();

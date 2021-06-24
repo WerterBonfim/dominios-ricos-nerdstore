@@ -14,6 +14,8 @@ namespace NerdStore.Vendas.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(250)");
 
+            builder.Property(x => x.ValorUnitario);
+
             builder.Property(x => x.ProdutoId)
                 .IsRequired();
             

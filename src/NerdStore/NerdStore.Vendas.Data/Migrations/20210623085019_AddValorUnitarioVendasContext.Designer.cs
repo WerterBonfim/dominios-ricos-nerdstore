@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NerdStore.Vendas.Data;
 
 namespace NerdStore.Vendas.Data.Migrations
 {
     [DbContext(typeof(VendasContext))]
-    partial class VendasContextModelSnapshot : ModelSnapshot
+    [Migration("20210623085019_AddValorUnitarioVendasContext")]
+    partial class AddValorUnitarioVendasContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,9 +98,6 @@ namespace NerdStore.Vendas.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Codigo")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
@@ -106,21 +105,8 @@ namespace NerdStore.Vendas.Data.Migrations
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Desconto")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("PercentualDesconto")
-                        .IsRequired()
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
-
                     b.Property<int>("TipoDesconto")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Utilizado")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

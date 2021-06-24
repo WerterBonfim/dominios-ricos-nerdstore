@@ -23,6 +23,7 @@ namespace NerdStore.Vendas.Domain
         public bool VoucherUtilizado { get; private set; }
         public decimal ValorDeDesconto { get; private set; }
         public IReadOnlyCollection<PedidoItem> Itens => _itens;
+        
 
         public Pedido()
         {
@@ -84,7 +85,6 @@ namespace NerdStore.Vendas.Domain
             if (Voucher != null)
                 valor = CalcularDescontoDoVoucher(valor);
 
-
             return valor;
         }
 
@@ -121,27 +121,33 @@ namespace NerdStore.Vendas.Domain
             return totalPedido - Voucher.Desconto;
         }
 
-        public void AtualizarItem(PedidoItem item)
+        public void AtualizarItem(Guid produtoId, int quantidade)
         {
-            VerificarSeItemExiste(item);
-            ValidaQuantidadeDeItens(item.Quantidade);
+            VerificarSeItemExiste(produtoId);
+            ValidaQuantidadeDeItens(quantidade);
 
-            var pedidoItem = _itens.First(x => x.ProdutoId == item.ProdutoId);
-            pedidoItem.AtualizarQuantidade(item.Quantidade);
+            var pedidoItem = _itens.First(x => x.ProdutoId == produtoId);
+            pedidoItem.AtualizarQuantidade(quantidade);
             
         }
 
-        private void VerificarSeItemExiste(PedidoItem item)
+        private void VerificarSeItemExiste(Guid produtoId)
         {
-            var existeOItemNoPedido = _itens.Contains(item);
+            var existeOItemNoPedido = _itens.Count > 0 && _itens.Any(x => x.ProdutoId == produtoId);
             if (!existeOItemNoPedido)
                 throw new DomainException("Não existe esse item no pedido");
         }
 
         public void RemoverItem(PedidoItem item)
         {
-            VerificarSeItemExiste(item);
+            VerificarSeItemExiste(item.ProdutoId);
+            RemoverItem(item.ProdutoId);
+        }
 
+        public void RemoverItem(Guid produtoId)
+        {
+            VerificarSeItemExiste(produtoId);
+            var item = _itens.First(x => x.ProdutoId == produtoId);
             _itens.Remove(item);
         }
 
@@ -159,6 +165,11 @@ namespace NerdStore.Vendas.Domain
         public bool Contem(PedidoItem item)
         {
             return _itens.Contains(item);
+        }
+        
+        public bool Contem(Guid produtoId)
+        {
+            return _itens.Any(x => x.ProdutoId == produtoId);
         }
 
         public override void Validar()

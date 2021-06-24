@@ -14,10 +14,26 @@ namespace NerdStore.Vendas.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(100)");
 
+            builder.Property(x => x.Desconto)
+                .IsRequired();
+            
+            builder.Property(x => x.PercentualDesconto)
+                .IsRequired();
+            
+            builder.Property(x => x.Quantidade)
+                .IsRequired();
+            
+            builder.Property(x => x.Ativo);
+            
+            builder.Property(x => x.Utilizado);
+            
+            builder.Property(x => x.TipoDesconto);
+
+
             builder.HasMany(c => c.Pedidos)
                 .WithOne(x => x.Voucher)
                 .HasForeignKey(x => x.VoucherId);
-            
+
 
             builder.ToTable("Vouchers");
         }

@@ -42,14 +42,15 @@ namespace NerdStore.Vendas.Domain
         }
 
 
-        public ValidationResult ValidarSeAplicavel()
+        internal ValidationResult ValidarSeAplicavel()
         {
-            return new ValidacaoVoucher().Validate(this);
+            Validar();
+            return ResultadoDaValidacao;
         }
 
         public override void Validar()
         {
-            throw new NotImplementedException();
+            new ValidacaoVoucher().Validate(this);
         }
     }
 
