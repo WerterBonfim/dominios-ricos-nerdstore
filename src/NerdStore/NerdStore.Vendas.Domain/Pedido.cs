@@ -157,6 +157,7 @@ namespace NerdStore.Vendas.Domain
             if (!validacao.IsValid) return validacao;
 
             Voucher = voucher;
+            VoucherId = voucher.Id;
             VoucherUtilizado = true;
 
             return validacao;

@@ -60,6 +60,8 @@ namespace NerdStore.Core.WebApi.Controllers
                 mensagem
             });
         }
+        
+        
 
         protected void AdicionarErro(string mensagem) => Erros.Add(new DomainNotificaton("Domain", mensagem));
         private bool OperacaoValida() => !Erros.Any();

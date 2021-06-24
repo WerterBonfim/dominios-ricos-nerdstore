@@ -2,20 +2,19 @@ using System;
 using FluentValidation;
 using NerdStore.Core.Messages;
 
-namespace NerdStore.Vendas.Application.Commands
+namespace NerdStore.Vendas.Application.Commands.Pedido
 {
     public class RemoverItemPedidoCommand : Command
     {
         public Guid ClienteId { get; set; }
         public Guid ProdutoId { get; set; }
-        public Guid PedidoId { get; set; }
 
-        public RemoverItemPedidoCommand(Guid clienteId, Guid produtoId, Guid pedidoId)
+        public RemoverItemPedidoCommand(Guid clienteId, Guid produtoId)
         {
+            AggregateId = clienteId;
             ClienteId = clienteId;
             ProdutoId = produtoId;
-            PedidoId = pedidoId;
-
+            Validar();
         }
         
         public override void Validar()

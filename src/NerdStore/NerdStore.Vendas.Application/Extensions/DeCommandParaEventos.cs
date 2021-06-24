@@ -1,4 +1,6 @@
+using System;
 using NerdStore.Vendas.Application.Commands;
+using NerdStore.Vendas.Application.Commands.Pedido;
 using NerdStore.Vendas.Application.Events;
 
 namespace NerdStore.Vendas.Application.Extensions
@@ -10,7 +12,6 @@ namespace NerdStore.Vendas.Application.Extensions
             return new(
                 command.ClienteId,
                 command.ProdutoId,
-                command.PedidoId,
                 command.Quantidade);
         }
 
@@ -18,17 +19,19 @@ namespace NerdStore.Vendas.Application.Extensions
         {
             return new(
                 command.ClienteId,
-                command.ProdutoId,
-                command.PedidoId
+                command.ProdutoId
             );
         }
 
-        public static VoucherAplicadoNoPedidoEvent ConverterParaEvento(this AplicarVoucherPedidoCommand command)
+        public static VoucherAplicadoNoPedidoEvent ConverterParaEvento(
+            this AplicarVoucherPedidoCommand command,
+            Guid voucherId,
+            Guid pedidoId)
         {
             return new(
                 command.ClienteId,
-                command.PedidoId,
-                command.CodigoVoucher
+                pedidoId,
+                voucherId
             );
         }
     }

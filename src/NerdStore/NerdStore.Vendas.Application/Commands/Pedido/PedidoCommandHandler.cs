@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -10,7 +9,7 @@ using NerdStore.Vendas.Application.Events;
 using NerdStore.Vendas.Application.Extensions;
 using NerdStore.Vendas.Domain;
 
-namespace NerdStore.Vendas.Application.Commands
+namespace NerdStore.Vendas.Application.Commands.Pedido
 {
     public class PedidoCommandHandler :
         IRequestHandler<AdicionarItemPedidoCommand, bool>,
@@ -49,13 +48,13 @@ namespace NerdStore.Vendas.Application.Commands
             return adicionou;
         }
 
-        private async Task<Pedido> BuscarPedido(AdicionarItemPedidoCommand message)
+        private async Task<Domain.Pedido> BuscarPedido(AdicionarItemPedidoCommand message)
         {
             // TODO: Simular varios pedidos não finalizados 
             var pedido = await _pedidoRepository.BuscarPedidoRascunhoPorClienteId(message.ClienteId);
             if (pedido == null)
             {
-                pedido = new Pedido(message.ClienteId);
+                pedido = new Domain.Pedido(message.ClienteId);
                 _pedidoRepository.Adicionar(pedido);
                 pedido.AdicionarEvento(new PedidoRascunhoIniciadoEvent(message.ClienteId, pedido.Id));
             }
@@ -63,7 +62,7 @@ namespace NerdStore.Vendas.Application.Commands
             return pedido;
         }
 
-        private void AdicionarItem(Pedido pedido, PedidoItem item)
+        private void AdicionarItem(Domain.Pedido pedido, PedidoItem item)
         {
             var itemJaFoiAdicionadoPreviamente = pedido.Contem(item);
             pedido.AdicionarItem(item);
@@ -95,7 +94,7 @@ namespace NerdStore.Vendas.Application.Commands
             if (pedido == null)
                 return false;
 
-            var item = await _pedidoRepository.BuscarItemPorPedido(command.PedidoId, command.ProdutoId);
+            var item = await _pedidoRepository.BuscarItemPorPedido(pedido.Id, command.ProdutoId);
             if (!pedido.Contem(item))
             {
                 await _mediatrHandler.PublicarNotificacao(NotificaoDeItemNaoEncontrado);
@@ -150,11 +149,14 @@ namespace NerdStore.Vendas.Application.Commands
             var aplicouVoucher = await TentaAplicarVoucher(pedido, command.CodigoVoucher);
             if (!aplicouVoucher) return false;
 
-            var atualizou = await EfetuaCommitDeAtualizacao(pedido, command.ConverterParaEvento());
+            var atualizou = await EfetuaCommitDeAtualizacao(pedido,
+                command.ConverterParaEvento(pedido.VoucherId.Value, pedido.Id),
+                new PedidoAtualizadoEvent(command.ClienteId, pedido.Id, pedido.ValorTotal)
+            );
             return atualizou;
         }
 
-        private async Task<bool> TentaAplicarVoucher(Pedido pedido, string codigoVoucher)
+        private async Task<bool> TentaAplicarVoucher(Domain.Pedido pedido, string codigoVoucher)
         {
             var voucher = await _pedidoRepository.BuscarVoucherPorCodigo(codigoVoucher);
             if (voucher == null)
@@ -172,6 +174,8 @@ namespace NerdStore.Vendas.Application.Commands
 
                 return false;
             }
+    
+            _pedidoRepository.Atualizar(pedido);
 
             return true;
         }
@@ -179,7 +183,7 @@ namespace NerdStore.Vendas.Application.Commands
         #endregion
 
 
-        public async Task<Pedido> BuscarPedido(Guid clienteId)
+        public async Task<Domain.Pedido> BuscarPedido(Guid clienteId)
         {
             var pedido = await _pedidoRepository.BuscarPedidoRascunhoPorClienteId(clienteId);
             if (pedido == null)
@@ -190,6 +194,7 @@ namespace NerdStore.Vendas.Application.Commands
 
             return pedido;
         }
+
 
         private static DomainNotificaton NotificaoDeItemNaoEncontrado =>
             new("Pedido",
@@ -207,13 +212,17 @@ namespace NerdStore.Vendas.Application.Commands
             new("Pedido",
                 "Voucher não encontrado!");
 
-        private async Task<bool> EfetuaCommitDeAtualizacao(Pedido pedido, Event evento)
+        private async Task<bool> EfetuaCommitDeAtualizacao(Domain.Pedido pedido, params Event[] eventos)
         {
             var atualizou = await _pedidoRepository.UnitOfWork.Commit();
 
             if (!atualizou)
+            {
                 await _mediatrHandler.PublicarNotificacao(NotificaoDePedidoNaoAtualizado);
-            else
+                return atualizou;
+            }
+
+            foreach (var evento in eventos)
                 pedido.AdicionarEvento(evento);
 
             return atualizou;

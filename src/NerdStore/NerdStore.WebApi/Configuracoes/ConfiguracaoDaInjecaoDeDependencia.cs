@@ -13,6 +13,7 @@ using NerdStore.Core.Communication;
 using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Vendas.Application.Commands;
+using NerdStore.Vendas.Application.Commands.Pedido;
 using NerdStore.Vendas.Application.Events;
 using NerdStore.Vendas.Application.Queries;
 using NerdStore.Vendas.Data;

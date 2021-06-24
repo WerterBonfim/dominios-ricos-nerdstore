@@ -10,6 +10,7 @@ using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Core.WebApi.Controllers;
 using NerdStore.Vendas.Application.Commands;
+using NerdStore.Vendas.Application.Commands.Pedido;
 using NerdStore.Vendas.Application.Queries;
 
 namespace NerdStore.WebApi.Controllers
@@ -42,63 +43,64 @@ namespace NerdStore.WebApi.Controllers
             return RespostaPersonalizada(viewModel);
         }
 
-        // [HttpPost("aplicar-voucher")]
-        // public async Task<IActionResult> AplicarVoucher(string voucherCodigo)
-        // {
-        //     var command = new AplicarVoucherNoPedidoCommand(ClienteId, voucherCodigo);
-        //     var aplicou = await _mediatrHandler.EnviarComando(command);
-        //
-        //     if (!aplicou)
-        //     {
-        //         AdicionarErro("Não foi possivel aplicar o voucher.");
-        //         return RespostaPersonalizada();
-        //     }
-        //
-        //     var carrinhoViewModel = _pedidoQueries.BuscarCarrinhoCliente(ClienteId);
-        //     return RespostaPersonalizada(carrinhoViewModel);
-        // }
+        
+        [HttpPost("aplicar-voucher")]
+        public async Task<IActionResult> AplicarVoucher([FromQuery(Name = "codigo")]string voucherCodigo)
+        {
+            var command = new AplicarVoucherPedidoCommand(ClienteId,  voucherCodigo);
+            var aplicou = await _mediatrHandler.EnviarComando(command);
+        
+            if (!aplicou)
+            {
+                AdicionarErro("Não foi possivel aplicar o voucher.");
+                return RespostaPersonalizada();
+            }
+        
+            var carrinhoViewModel = await _pedidoQueries.BuscarCarrinhoCliente(ClienteId);
+            return RespostaPersonalizada(carrinhoViewModel);
+        }
 
-        // [HttpPost("remover-item")]
-        // public async Task<IActionResult> RemoverItem(Guid produtoId)
-        // {
-        //     var produto = _produtoAppService.BuscarPorId(produtoId);
-        //     AdicionarErro("Produto não existe no carrinho");
-        //     if (produto == null) return RespostaPersonalizada();
-        //
-        //     var command = new RemoverItemPedidoCommand(ClienteId, produtoId);
-        //     var removido = await _mediatrHandler.EnviarComando(command);
-        //
-        //     if (!removido)
-        //     {
-        //         AdicionarErro("Não foi possivel remover o item");
-        //         return RespostaPersonalizada();
-        //     }
-        //     
-        //     var carrinhoViewModel = _pedidoQueries.BuscarCarrinhoCliente(ClienteId);
-        //     return RespostaPersonalizada(carrinhoViewModel);
-        //
-        // }
+        [HttpPost("remover-item")]
+        public async Task<IActionResult> RemoverItem(Guid produtoId)
+        {
+            var produto = _produtoAppService.BuscarPorId(produtoId);
+            AdicionarErro("Produto não existe no carrinho");
+            if (produto == null) return RespostaPersonalizada();
+        
+            var command = new RemoverItemPedidoCommand(ClienteId, produtoId);
+            var removido = await _mediatrHandler.EnviarComando(command);
+        
+            if (!removido)
+            {
+                AdicionarErro("Não foi possivel remover o item");
+                return RespostaPersonalizada();
+            }
+            
+            var carrinhoViewModel = _pedidoQueries.BuscarCarrinhoCliente(ClienteId);
+            return RespostaPersonalizada(carrinhoViewModel);
+        
+        }
 
-        // [HttpPost("atualizar-item")]
-        // public async Task<IActionResult> Atualizar(Guid produtoId, int quantidade)
-        // {
-        //     var produto = _produtoAppService.BuscarPorId(produtoId);
-        //     AdicionarErro("Produto não existe no carrinho");
-        //     if (produto == null) return RespostaPersonalizada();
-        //
-        //     var command = new AtualizarItemPedidoCommand(ClienteId, produtoId, quantidades);
-        //     var atualizado = await _mediatrHandler.EnviarComando(command);
-        //
-        //     if (!atualizado)
-        //     {
-        //         AdicionarErro("Não foi possivel atualizar o carrinho");
-        //         return RespostaPersonalizada();
-        //     }
-        //     
-        //     var carrinhoViewModel = _pedidoQueries.BuscarCarrinhoCliente(ClienteId);
-        //     return RespostaPersonalizada(carrinhoViewModel);
-        //
-        // }
+        [HttpPost("atualizar-item")]
+        public async Task<IActionResult> Atualizar(Guid produtoId, int quantidade)
+        {
+            var produto = _produtoAppService.BuscarPorId(produtoId);
+            AdicionarErro("Produto não existe no carrinho");
+            if (produto == null) return RespostaPersonalizada();
+        
+            var command = new AtualizarItemPedidoCommand(ClienteId, produtoId, quantidade);
+            var atualizado = await _mediatrHandler.EnviarComando(command);
+        
+            if (!atualizado)
+            {
+                AdicionarErro("Não foi possivel atualizar o carrinho");
+                return RespostaPersonalizada();
+            }
+            
+            var carrinhoViewModel = _pedidoQueries.BuscarCarrinhoCliente(ClienteId);
+            return RespostaPersonalizada(carrinhoViewModel);
+        
+        }
 
 
         /// <summary>

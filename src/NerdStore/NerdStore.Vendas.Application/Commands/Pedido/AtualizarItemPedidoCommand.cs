@@ -2,14 +2,22 @@ using System;
 using FluentValidation;
 using NerdStore.Core.Messages;
 
-namespace NerdStore.Vendas.Application.Commands
+namespace NerdStore.Vendas.Application.Commands.Pedido
 {
     public class AtualizarItemPedidoCommand : Command
     {
-        public Guid ClienteId { get; set; }
-        public Guid PedidoId { get; set; }
-        public Guid ProdutoId { get; set; }
-        public int Quantidade { get; set; }
+        public Guid ClienteId { get; private set; }
+        public Guid ProdutoId { get; private set; }
+        public int Quantidade { get; private set; }
+
+        public AtualizarItemPedidoCommand(Guid clienteId, Guid produtoId, int quantidade)
+        {
+            AggregateId = clienteId;
+            ClienteId = clienteId;
+            ProdutoId = produtoId;
+            Quantidade = quantidade;
+            Validar();
+        }
 
         public override void Validar()
         {
@@ -23,11 +31,7 @@ namespace NerdStore.Vendas.Application.Commands
                 RuleFor(x => x.ClienteId)
                     .NotEqual(Guid.Empty)
                     .WithMessage("Id do cliente é inválido");
-                
-                RuleFor(x => x.PedidoId)
-                    .NotEqual(Guid.Empty)
-                    .WithMessage("Id do pedido é inválido");
-                
+
                 RuleFor(x => x.ProdutoId)
                     .NotEqual(Guid.Empty)
                     .WithMessage("Id do produto é inválido");

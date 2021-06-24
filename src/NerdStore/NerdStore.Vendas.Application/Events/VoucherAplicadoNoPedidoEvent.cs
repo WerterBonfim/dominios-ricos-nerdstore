@@ -7,13 +7,14 @@ namespace NerdStore.Vendas.Application.Events
     {
         public Guid ClienteId { get; private set; }
         public Guid PedidoId { get; private set; }
-        public string CodigoVoucher { get; private set; }
+        public Guid VoucherId { get; private set; }
 
-        public VoucherAplicadoNoPedidoEvent(Guid clienteId, Guid pedidoId, string codigoVoucher)
+        public VoucherAplicadoNoPedidoEvent(Guid clienteId, Guid pedidoId, Guid voucherId)
         {
+            AggregateId = voucherId;
+            VoucherId = voucherId;
             ClienteId = clienteId;
             PedidoId = pedidoId;
-            CodigoVoucher = codigoVoucher;
         }
     }
 }

@@ -39,6 +39,7 @@ namespace NerdStore.Vendas.Domain
             TipoDesconto = tipoDesconto;
             Ativo = ativo;
             Utilizado = utilizado;
+            Validar();
         }
 
 
@@ -50,7 +51,7 @@ namespace NerdStore.Vendas.Domain
 
         public override void Validar()
         {
-            new ValidacaoVoucher().Validate(this);
+            ResultadoDaValidacao = new ValidacaoVoucher().Validate(this);
         }
     }
 

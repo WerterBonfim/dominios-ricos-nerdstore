@@ -9,4 +9,19 @@
       <ProjectReference Include="..\NerdStore.Vendas.Domain\NerdStore.Vendas.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Queries\ViewModels\Pedido\**" />
+      <Compile Remove="Commands\Voucher\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Queries\ViewModels\Pedido\**" />
+      <EmbeddedResource Remove="Commands\Voucher\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Queries\ViewModels\Pedido\**" />
+      <None Remove="Commands\Voucher\**" />
+    </ItemGroup>
+
 </Project>

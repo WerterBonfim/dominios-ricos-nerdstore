@@ -7,13 +7,12 @@ namespace NerdStore.Vendas.Application.Events
     {
         public Guid ClienteId { get; set; }
         public Guid ProdutoId { get; set; }
-        public Guid PedidoId { get; set; }
 
-        public ProdutoRemovidoDoPedidoEvent(Guid clienteId, Guid produtoId, Guid pedidoId)
+        public ProdutoRemovidoDoPedidoEvent(Guid clienteId, Guid produtoId)
         {
+            AggregateId = clienteId;
             ClienteId = clienteId;
             ProdutoId = produtoId;
-            PedidoId = pedidoId;
         }
     }
 }

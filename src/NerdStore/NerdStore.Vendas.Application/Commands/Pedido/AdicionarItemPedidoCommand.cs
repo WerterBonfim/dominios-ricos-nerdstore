@@ -1,10 +1,8 @@
 using System;
 using FluentValidation;
-using FluentValidation.Results;
 using NerdStore.Core.Messages;
-using NerdStore.Vendas.Domain;
 
-namespace NerdStore.Vendas.Application.Commands
+namespace NerdStore.Vendas.Application.Commands.Pedido
 {
     public class AdicionarItemPedidoCommand : Command
     {
@@ -35,7 +33,7 @@ namespace NerdStore.Vendas.Application.Commands
             public static string IdClienteErroMsg => "Id do cliente inválido";
             public static string IdProdutoErroMsg => "Id do produto inválido";
             public static string NomeErroMsg => "O nome do produto não foi informado";
-            public static string QtdMaxErroMsg => $"A quantidade máxima de um item é {Pedido.QUANTIDADE_MAXIMA_ITENS}";
+            public static string QtdMaxErroMsg => $"A quantidade máxima de um item é {Domain.Pedido.QUANTIDADE_MAXIMA_ITENS}";
             public static string QtdMinErroMsg => "A quantidade miníma de um item é 1";
             public static string ValorErroMsg => "O Valor Unitario do item precisa ser maior que 0";
             
@@ -56,7 +54,7 @@ namespace NerdStore.Vendas.Application.Commands
                 RuleFor(c => c.Quantidade)
                     .GreaterThan(0)
                     .WithMessage(QtdMinErroMsg)
-                    .LessThanOrEqualTo(Pedido.QUANTIDADE_MAXIMA_ITENS)
+                    .LessThanOrEqualTo(Domain.Pedido.QUANTIDADE_MAXIMA_ITENS)
                     .WithMessage(QtdMaxErroMsg);
 
                 RuleFor(c => c.ValorUnitario)

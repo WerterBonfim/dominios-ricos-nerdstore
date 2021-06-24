@@ -19,4 +19,8 @@
       <ProjectReference Include="..\NerdStore.Vendas.Data\NerdStore.Vendas.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Controllers\VoucherController.cs" />
+    </ItemGroup>
+
 </Project>
