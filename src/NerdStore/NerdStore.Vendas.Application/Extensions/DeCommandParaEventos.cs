@@ -1,4 +1,6 @@
 using System;
+using NerdStore.Core.DomainObjects.DTO;
+using NerdStore.Core.Messages.CommonMessages.IntegrationEvents;
 using NerdStore.Vendas.Application.Commands;
 using NerdStore.Vendas.Application.Commands.Pedido;
 using NerdStore.Vendas.Application.Events;
@@ -32,6 +34,20 @@ namespace NerdStore.Vendas.Application.Extensions
                 command.ClienteId,
                 pedidoId,
                 voucherId
+            );
+        }
+
+        public static PedidoIniciadoEvent ConverterParaEvento( this FecharPedidoCommand command, ItensDoPedido itensDoPedido)
+        {
+            return new(
+                command.PedidoId,
+                command.ClienteId,
+                command.Total,
+                itensDoPedido,
+                command.NomeCartao,
+                command.NumeroCartao,
+                command.ExpiracaoCartao,
+                command.CvvCartao
             );
         }
     }

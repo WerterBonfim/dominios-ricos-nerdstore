@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.DomainObjects.DTO;
 using NerdStore.Core.Messages;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Vendas.Application.Events;
@@ -15,7 +17,8 @@ namespace NerdStore.Vendas.Application.Commands.Pedido
         IRequestHandler<AdicionarItemPedidoCommand, bool>,
         IRequestHandler<AtualizarItemPedidoCommand, bool>,
         IRequestHandler<RemoverItemPedidoCommand, bool>,
-        IRequestHandler<AplicarVoucherPedidoCommand, bool>
+        IRequestHandler<AplicarVoucherPedidoCommand, bool>,
+        IRequestHandler<FecharPedidoCommand, bool>
 
     {
         private readonly IPedidoRepository _pedidoRepository;
@@ -183,7 +186,37 @@ namespace NerdStore.Vendas.Application.Commands.Pedido
         #endregion
 
 
-        public async Task<Domain.Pedido> BuscarPedido(Guid clienteId)
+        #region [ Fechar Pedido ]
+
+        
+        public async Task<bool> Handle(FecharPedidoCommand command, CancellationToken cancellationToken)
+        {
+            if (OCommandEstaInvalido(command)) return false;
+            
+            var pedido = await BuscarPedido(command.ClienteId);
+            if (pedido == null)
+                return false;
+
+            pedido.InicarPedido();
+
+            var itensDoPedido = new ItensDoPedido
+            {
+                PedidoId = pedido.Id,
+                Items = pedido.Itens
+                    .Select(x => new Item {Id = x.Id, Quantidade = x.Quantidade})
+                    .ToList()
+            };
+
+            var atualizou = await EfetuaCommitDeAtualizacao(pedido,
+                command.ConverterParaEvento(itensDoPedido)
+            );
+            return atualizou;
+        }
+
+        #endregion
+        
+
+        private async Task<Domain.Pedido> BuscarPedido(Guid clienteId)
         {
             var pedido = await _pedidoRepository.BuscarPedidoRascunhoPorClienteId(clienteId);
             if (pedido == null)
@@ -218,6 +251,8 @@ namespace NerdStore.Vendas.Application.Commands.Pedido
 
             if (!atualizou)
             {
+                //TODO: Verificar quando o pedido for fechado, qual notificação devo
+                // publicar?
                 await _mediatrHandler.PublicarNotificacao(NotificaoDePedidoNaoAtualizado);
                 return atualizou;
             }
@@ -244,5 +279,7 @@ namespace NerdStore.Vendas.Application.Commands.Pedido
 
             return true;
         }
+
+       
     }
 }

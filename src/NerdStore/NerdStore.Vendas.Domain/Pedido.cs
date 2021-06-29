@@ -177,5 +177,10 @@ namespace NerdStore.Vendas.Domain
         {
             
         }
+
+        public void InicarPedido()
+        {
+            Status = PedidoStatus.Iniciado;
+        }
     }
 }
